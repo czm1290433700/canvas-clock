@@ -2,6 +2,7 @@
  * @author By chenzhenmin
  * @create in 2020/11/3
  */
+const radius = 3; // 画板宽
 var drawing = document.getElementById('clock'), context;
 // 判断浏览器是否支持canvas
 if(drawing.getContext){
@@ -14,14 +15,14 @@ if(drawing.getContext){
  * 把sin值封装成绝对正数,因为我不记得什么时候取负数了，头皮发麻
  */
 function sin(num){
-    return Math.abs(Math.sin(num));
+    return Math.abs(Math.sin(num * (2 * Math.PI / 360)));
 }
 
 /**
  * 把cos值封装成绝对正数
  */
 function cos(num){
-    return Math.abs(Math.cos(num));
+    return Math.abs(Math.cos(num * (2 * Math.PI / 360)));
 }
 
 /**
@@ -62,20 +63,20 @@ function PaintClockBorder(){
 function PaintClockSign(){
     context.beginPath();
     // 咱先画大的，每10分钟的,注意要分四个区间去渲染
-    for(let i = 1; i <= 12; i++){
+    for(let i = 0; i < 12; i++){
         // 每加一个就加30deg
-        if(i <= 3){
-            context.moveTo(100 + 85 * sin(30 * i) + 5, 100 - 85 * cos(30 * i));
-            context.arc(100 + 85 * sin(30 * i), 100 - 85 * cos(30 * i), 5, 0, 2 * Math.PI, false);
-        }else if(i > 3 && i <= 6){
-            // context.moveTo(100 + 85 * sin(30 * i) + 5, 100 + 85 * cos(30 * i));
-            // context.arc(100 + 85 * sin(30 * i), 100 + 85 * cos(30 * i), 5, 2 * Math.PI, false);
-        }else if(i > 6 && i <= 9){
-            // context.moveTo(100 - 85 * sin(30 * i) + 5, 100 + 85 * cos(30 * i));
-            // context.arc(100 - 85 * sin(30 * i), 100 + 85 * cos(30 * i), 5, 2 * Math.PI, false);
+        if(i < 3){
+            context.moveTo(100 + 85 * sin(30 * i) + radius, 100 - 85 * cos(30 * i));
+            context.arc(100 + 85 * sin(30 * i), 100 - 85 * cos(30 * i), radius, 0, 2 * Math.PI, false);
+        }else if(i >= 3 && i < 6){
+            context.moveTo(100 + 85 * sin(30 * i) + radius, 100 + 85 * cos(30 * i));
+            context.arc(100 + 85 * sin(30 * i), 100 + 85 * cos(30 * i), radius, 2 * Math.PI, false);
+        }else if(i >= 6 && i < 9){
+            context.moveTo(100 - 85 * sin(30 * i) + radius, 100 + 85 * cos(30 * i));
+            context.arc(100 - 85 * sin(30 * i), 100 + 85 * cos(30 * i), radius, 2 * Math.PI, false);
         }else{
-            // context.moveTo(100 - 85 * sin(30 * i) + 5, 100 - 85 * cos(30 * i));
-            // context.arc(100 - 85 * sin(30 * i), 100 - 85 * cos(30 * i), 5, 2 * Math.PI, false);
+            context.moveTo(100 - 85 * sin(30 * i) + radius, 100 - 85 * cos(30 * i));
+            context.arc(100 - 85 * sin(30 * i), 100 - 85 * cos(30 * i), radius, 2 * Math.PI, false);
         }
     }
     // 然后咱画一下分钟的
