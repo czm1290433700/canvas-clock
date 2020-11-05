@@ -8,11 +8,14 @@ const radius = 4, // 指数圈半径
     radius3 = 83, // 圆3半径
     fontRadius = 65, // 字体距圆心的距离
     hourWidth = 5, // 时针宽度
-    hourHeight = 60, // 时针高度
+    hourHeight = 55, // 时针高度
+    hourShadow = 2; // 时针阴影
     minuteWidth = 3, // 分针宽度
-    minuteHeight = 62, // 分针高度
+    minuteHeight = 68, // 分针高度
+    minuteShadow = 1; // 分针阴影
     secondWidth = 1, // 秒针宽度
-    secondHeight = 64; // 秒针高度
+    secondHeight = 80, // 秒针高度
+    secondShadow = 0.5; // 秒针阴影
 var drawing = document.getElementById('clock'), context;
 // 判断浏览器是否支持canvas
 if(drawing.getContext){
@@ -93,13 +96,13 @@ function PaintClockSign(){
             context.arc(radius1 + radius3 * sin(30 * i), radius1 - radius3 * cos(30 * i), radius, 0, 2 * Math.PI, false);
         }else if(i >= 3 && i < 6){
             context.moveTo(radius1 + radius3 * sin(30 * i) + radius, radius1 + radius3 * cos(30 * i));
-            context.arc(radius1 + radius3 * sin(30 * i), radius1 + radius3 * cos(30 * i), radius, 2 * Math.PI, false);
+            context.arc(radius1 + radius3 * sin(30 * i), radius1 + radius3 * cos(30 * i), radius, 0, 2 * Math.PI, false);
         }else if(i >= 6 && i < 9){
             context.moveTo(radius1 - radius3 * sin(30 * i) + radius, radius1 + radius3 * cos(30 * i));
-            context.arc(radius1 - radius3 * sin(30 * i), radius1 + radius3 * cos(30 * i), radius, 2 * Math.PI, false);
+            context.arc(radius1 - radius3 * sin(30 * i), radius1 + radius3 * cos(30 * i), radius, 0, 2 * Math.PI, false);
         }else{
             context.moveTo(radius1 - radius3 * sin(30 * i) + radius, radius1 - radius3 * cos(30 * i));
-            context.arc(radius1 - radius3 * sin(30 * i), radius1 - radius3 * cos(30 * i), radius, 2 * Math.PI, false);
+            context.arc(radius1 - radius3 * sin(30 * i), radius1 - radius3 * cos(30 * i), radius, 0, 2 * Math.PI, false);
         }
     }
     context.fillStyle = '#000';
@@ -150,22 +153,39 @@ function PaintClockPointer(){
     context.beginPath();
     context.fillStyle = '#fff';
     // 搞个阴影吧，不搞阴影太丑了。
-    context.shadowOffsetX = 2;
-    context.shadowOffsetY = 2;
     context.shadowBlur = 4;
     context.shadowColor = '#B97C29';
     // 先把画布原点换到圆心，因为得绕中心旋转
-    context.translate(100, 100);
+    context.translate(radius1, radius1);
     // 先时针吧，时针得粗一点
+    context.shadowOffsetX = hourShadow;
+    context.shadowOffsetY = hourShadow;
     context.rotate(degTolength(hour * 30));
-    context.rect(radius1 - 2.5 - 100, radius1 - hourHeight - 90, hourWidth, hourHeight);
+    context.rect(- 2.5, - hourHeight + 10, hourWidth, hourHeight);
     context.fill();
     // 分针
-    context.rotate(degTolength(minute * 6));
-    context.rect(radius1 - 2.5 - 100, radius1 - minuteHeight - 90, minuteWidth, minuteHeight);
+    context.shadowOffsetX = minuteShadow;
+    context.shadowOffsetY = minuteShadow;
+    context.rotate(degTolength( - hour * 30 + minute * 6));
+    context.rect(- 2.5, - minuteHeight + 10, minuteWidth, minuteHeight);
     context.fill();
     //秒针
-    //context.fillRect(radius1 - 2.5, radius1 - secondHeight + 10, secondWidth, secondHeight);
+    context.shadowOffsetX = secondShadow;
+    context.shadowOffsetY = secondShadow;
+    context.rotate(degTolength(- ( - hour * 30 + minute * 6) + second * 6));
+    context.fillRect(- 2.5, - secondHeight + 10, secondWidth, secondHeight);
+    context.fill();
+    // 圆心画个小黑点吧
+    context.beginPath();
+    context.arc(0 ,0 ,1 ,0, 2 * Math.PI, false);
+    context.fillStyle = '#000';
+    context.fill();
 }
 
+/**
+ * 钟表动画
+ */
+function PaintClockAnimation(){
+    
+}
 
