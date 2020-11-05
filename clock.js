@@ -147,18 +147,25 @@ function PaintClockPointer(){
     let hour = new Date().getHours(),
         minute = new Date().getMinutes(),
         second = new Date().getSeconds();
+    context.beginPath();
     context.fillStyle = '#fff';
     // 搞个阴影吧，不搞阴影太丑了。
     context.shadowOffsetX = 2;
     context.shadowOffsetY = 2;
     context.shadowBlur = 4;
     context.shadowColor = '#B97C29';
+    // 先把画布原点换到圆心，因为得绕中心旋转
+    context.translate(100, 100);
     // 先时针吧，时针得粗一点
-    context.fillRect(radius1 - 2.5, radius1 - hourHeight + 10, hourWidth, hourHeight);
+    context.rotate(degTolength(hour * 30));
+    context.rect(radius1 - 2.5 - 100, radius1 - hourHeight - 90, hourWidth, hourHeight);
+    context.fill();
     // 分针
-    context.fillRect(radius1 - 2.5, radius1 - minuteHeight + 10, minuteWidth, minuteHeight);
+    context.rotate(degTolength(minute * 6));
+    context.rect(radius1 - 2.5 - 100, radius1 - minuteHeight - 90, minuteWidth, minuteHeight);
+    context.fill();
     //秒针
-    context.fillRect(radius1 - 2.5, radius1 - secondHeight + 10, secondWidth, secondHeight);
+    //context.fillRect(radius1 - 2.5, radius1 - secondHeight + 10, secondWidth, secondHeight);
 }
 
 
