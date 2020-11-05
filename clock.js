@@ -20,9 +20,7 @@ var drawing = document.getElementById('clock'), context;
 // 判断浏览器是否支持canvas
 if(drawing.getContext){
     context = drawing.getContext('2d');
-    PaintClockBorder();
-    PaintClockSign();
-    PaintClockPointer();
+    setInterval(paintClock, 1000);
 }
 
 /**
@@ -51,7 +49,7 @@ function degTolength(num){
 /**
  * 钟表轮框
  */
-function PaintClockBorder(){
+function paintClockBorder(){
     // 先画一个圈圈出来
     context.beginPath();
     context.arc(100, 100, radius1, 0, 2 * Math.PI, false);
@@ -86,7 +84,7 @@ function PaintClockBorder(){
 /**
  * 钟表指数
  */
-function PaintClockSign(){
+function paintClockSign(){
     context.beginPath();
     // 咱先画大的，每10分钟的,注意要分四个区间去渲染
     for(let i = 0; i < 12; i++){
@@ -146,7 +144,7 @@ function PaintClockSign(){
 /**
  * 钟表指针
  */
-function PaintClockPointer(){
+function paintClockPointer(){
     let hour = new Date().getHours(),
         minute = new Date().getMinutes(),
         second = new Date().getSeconds();
@@ -161,31 +159,36 @@ function PaintClockPointer(){
     context.shadowOffsetX = hourShadow;
     context.shadowOffsetY = hourShadow;
     context.rotate(degTolength(hour * 30));
-    context.rect(- 2.5, - hourHeight + 10, hourWidth, hourHeight);
-    context.fill();
+    context.fillRect(- 2.5, - hourHeight + 10, hourWidth, hourHeight);
     // 分针
     context.shadowOffsetX = minuteShadow;
     context.shadowOffsetY = minuteShadow;
     context.rotate(degTolength( - hour * 30 + minute * 6));
-    context.rect(- 2.5, - minuteHeight + 10, minuteWidth, minuteHeight);
-    context.fill();
+    context.fillRect(- 2.5, - minuteHeight + 10, minuteWidth, minuteHeight);
     //秒针
     context.shadowOffsetX = secondShadow;
     context.shadowOffsetY = secondShadow;
     context.rotate(degTolength(- ( - hour * 30 + minute * 6) + second * 6));
     context.fillRect(- 2.5, - secondHeight + 10, secondWidth, secondHeight);
-    context.fill();
     // 圆心画个小黑点吧
     context.beginPath();
     context.arc(0 ,0 ,1 ,0, 2 * Math.PI, false);
     context.fillStyle = '#000';
     context.fill();
+    // 要初始化成最初的状态
+    context.translate(-1 * radius1, -1 * radius1);
+    context.rotate(degTolength(- (- ( - hour * 30 + minute * 6) + second * 6)));
 }
 
 /**
- * 钟表动画
+ * 绘制钟表
  */
-function PaintClockAnimation(){
-    
+function paintClock(){
+    context.height = context.height;
+    context.save();
+    paintClockBorder();
+    paintClockSign();
+    paintClockPointer();
+    context.restore();
 }
 
