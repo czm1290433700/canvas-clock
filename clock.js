@@ -174,10 +174,6 @@ function paintClockPointer(){
     context.beginPath();
     context.arc(0 ,0 ,1 ,0, 2 * Math.PI, false);
     context.fillStyle = '#000';
-    context.fill();
-    // 要初始化成最初的状态
-    context.translate(-1 * radius1, -1 * radius1);
-    context.rotate(degTolength(- (- ( - hour * 30 + minute * 6) + second * 6)));
 }
 
 /**
