@@ -180,11 +180,14 @@ function paintClockPointer(){
  * 绘制钟表
  */
 function paintClock(){
+    // 清空画布
     context.height = context.height;
+    // 保存初始的配置，颜色，画布圆心，旋转度数等
     context.save();
     paintClockBorder();
     paintClockSign();
     paintClockPointer();
+    // 重置配置
     context.restore();
 }
 
